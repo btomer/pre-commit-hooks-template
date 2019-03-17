@@ -1,12 +1,15 @@
 import os
-from setuptools import setup
+import setuptools
+import sys
 
+# We can't rely on the PyYAML package being installed, so we include a hard-coded version
 try:
-    import yaml
+    if sys.version_info >= (3, 0):
+        import python_packages.yaml_python3 as yaml
+    else:
+        import python_packages.yaml_python2 as yaml
 except ImportError:
-    print('ERROR: Pre-commit hooks template: The "yaml" python is not installed.')
-    print('Please install it by running: "pip install pyyaml".')
-    print('')
+    print('ERROR: Pre-commit hooks template: Failed to import the "yaml" python package.')
     raise
 
 SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -46,7 +49,7 @@ def main():
             )
         )
 
-    setup(
+    setuptools.setup(
         name=PROJECT_NAME,
         description=PROJECT_NAME,
         version=PROJECT_VERSION,
